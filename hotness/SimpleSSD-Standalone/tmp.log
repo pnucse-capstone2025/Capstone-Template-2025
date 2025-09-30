@@ -1,0 +1,17 @@
+SimpleSSD Standalone v2.0
+********** Begin of simulation **********
+[2K                                                           *** Statistics of Request Generator ***
+Tick: 33470195405260
+Time (ps): 0 - 33470195405260 (33470195405260)
+I/O (bytes): 8589934592 (256644291.674797 B/s)
+I/O (counts): 2097152 (Read: 0, Write: 2097152)
+*** End of statistics ***
+*** Statistics of Block I/O Entry ***
+Latency (ns): min=4915.080000, max=1320992.120000, avg=72705.065429, stdev=19912.433822
+*** End of statistics ***
+*** Statistics of Event Engine ***
+Simulation Tick (ps): 33470195405260
+Host time duration (sec): 9.093456
+Event handled: 6325782 (695641.116406 ops)
+*** End of statistics ***
+End of simulation @ tick 33470195405260

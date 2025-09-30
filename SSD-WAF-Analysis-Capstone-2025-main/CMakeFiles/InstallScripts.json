@@ -1,0 +1,9 @@
+{
+	"InstallScripts" : 
+	[
+		"/Users/gagaga/Documents/newCapstone/simplessd-standalone/cmake_install.cmake",
+		"/Users/gagaga/Documents/newCapstone/simplessd-standalone/simplessd/cmake_install.cmake",
+		"/Users/gagaga/Documents/newCapstone/simplessd-standalone/simplessd/lib/mcpat/cmake_install.cmake"
+	],
+	"Parallel" : false
+}
