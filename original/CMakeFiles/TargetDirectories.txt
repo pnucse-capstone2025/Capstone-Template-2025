@@ -1,0 +1,9 @@
+/Users/gagaga/Documents/newCapstone/simplessd-standalone/CMakeFiles/simplessd-standalone.dir
+/Users/gagaga/Documents/newCapstone/simplessd-standalone/CMakeFiles/edit_cache.dir
+/Users/gagaga/Documents/newCapstone/simplessd-standalone/CMakeFiles/rebuild_cache.dir
+/Users/gagaga/Documents/newCapstone/simplessd-standalone/simplessd/CMakeFiles/simplessd.dir
+/Users/gagaga/Documents/newCapstone/simplessd-standalone/simplessd/CMakeFiles/edit_cache.dir
+/Users/gagaga/Documents/newCapstone/simplessd-standalone/simplessd/CMakeFiles/rebuild_cache.dir
+/Users/gagaga/Documents/newCapstone/simplessd-standalone/simplessd/lib/mcpat/CMakeFiles/mcpat.dir
+/Users/gagaga/Documents/newCapstone/simplessd-standalone/simplessd/lib/mcpat/CMakeFiles/edit_cache.dir
+/Users/gagaga/Documents/newCapstone/simplessd-standalone/simplessd/lib/mcpat/CMakeFiles/rebuild_cache.dir
