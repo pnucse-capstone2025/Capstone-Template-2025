@@ -1,236 +1,253 @@
-# Template for Capstone
-이 레파지토리는 학생들이 캡스톤 프로젝트 결과물을 위한 레파지토리 생성시에 참고할 내용들을 담고 있습니다.
-1. 레파지토리 생성
-2. 레파지토리 구성
-3. 레파지토리 제출 
-4. README.md 가이드라인
-5. README.md 작성팁
+## 1. 프로젝트 배경
+### 1.1. 국내외 시장 현황 및 문제점
+현대 자동차는 자율주행 및 커넥티드카 기술 발전으로 전자화 시대에 접어들었지만, 이로 인해 새로운 보안 위협에 노출되고 있습니다. 특히, 기존 차량 통신 프로토콜인 CAN(Controller Area Network)은 경량성과 실시간성을 위해 설계되어 데이터 위·변조 및 재전송 공격에 취약하다는 한계가 있습니다. 실제로 2015년 Jeep Cherokee 원격 해킹 사건은 이러한 취약점을 보여주며 자동차 보안의 시급성을 부각했습니다. 또한, 실제 차량 환경에서 보안 알고리즘을 테스트하는 것은 비용과 위험이 커서 체계적인 시뮬레이션 환경이 부족한 실정입니다.
 
----
+### 1.2. 필요성과 기대효과
+본 프로젝트는 Simulink를 활용해 가상의 자동차 통신 환경을 구축하고, 여기에 최적화된 보안 기술을 적용, 검증하는 프레임워크를 제공합니다. 이를 통해 실제 차량 실험의 비용과 위험을 줄이고, 자원 제약적인 ECU 환경에 적합한 보안 알고리즘의 성능을 평가할 수 있습니다. 궁극적으로 자동차 보안 기술의 신뢰성을 높여 자율주행차 및 커넥티드카의 안전한 상용화에 기여할 것으로 기대됩니다.
 
-## 1. 레파지토리 생성
-- [https://classroom.github.com/a/nRcUn8vA](https://classroom.github.com/a/nRcUn8vA)
-- 위 Github Classroom 링크에 접속해 본인 조의 github 레파지토리를 생성하세요.
+## 2. 개발 목표
+### 2.1. 목표 및 세부 내용
+본 프로젝트의 궁극적인 목표는 MATLAB/Simulink 환경에서 CAN-FD 기반 자동차 전장부품 데이터 전송 시스템을 설계하고, 여기에 보안 알고리즘(HMAC-SHA256, Freshness Counter)을 적용하여 실제 차량 내부 통신 환경에서 발생할 수 있는 위협을 모의 검증하는 것입니다. 이를 위해 송신 ECU에서 생성된 데이터(AppData, Freshness)가 수신 ECU에서 동일한 MAC 연산을 통해 검증되도록 하여, 데이터 위변조 및 재전송 공격을 차단하고, 정상적으로 인증된 데이터만이 제어 시스템에 입력되는 보안 게이트 구조를 구현합니다.
 
-<img width="700" alt="깃헙 클래스룸 레포 생성" src="https://github.com/user-attachments/assets/34ca1f43-c2cd-4880-a39e-0dafd889c35f" />
+특히, 본 연구는 CAN-FD 통신의 특성과 제약을 고려하여 무결성 검증(HMAC-SHA256)과 신선도 검증(Freshness Counter)을 동시에 적용하는 메커니즘을 설계함으로써 기존 CAN 환경에서 부족했던 보안성을 강화합니다. 이 과정을 통해 공격 시나리오(위변조, 재전송, MAC 불일치)에 대한 ECU 동작을 실험적으로 검증하고, 보안 모듈의 민감성 및 동기화 필요성을 체계적으로 분석합니다.
 
-- 레포지토리 생성 시 팀명은 `TEAM-{조 번호}` 형식으로 생성하세요.
-- 예를 들어, 2025년도 3조의 팀명은 `TEAM-03` 입니다.
-- 이 경우 `Capstone2025-team-03`이란 이름으로 레파지토리가 생성됩니다.
+또한, 기존의 단일 프로토콜 기반 보안 검증에서 나아가 본 프로젝트는 Ethernet 통신 경로를 병렬로 구현하여 CAN-FD와 함께 운용할 수 있는 시뮬레이션 환경을 마련합니다. Ethernet 기반 전송은 고속·대용량 데이터 처리에 강점을 가지는 반면, 외부 네트워크와의 연결로 보안 위협이 크다는 특성을 지닙니다. 따라서 본 연구에서는 CAN-FD와 Ethernet 경로를 동시에 모델링하고 동일한 보안 알고리즘을 병렬 적용하여, 차세대 차량 네트워크에서의 다중 프로토콜 환경 보안성 검증을 목표로 합니다.
 
----
+결국 본 프로젝트는 Simulink 시뮬레이션 환경에서 CAN-FD와 Ethernet을 통합한 보안 프레임워크를 제시하고, 이를 통해 다양한 보안 알고리즘의 적용 가능성을 실험적으로 검토함으로써 향후 자율주행차 및 커넥티드카 환경에서 신뢰성 높은 ECU 보안 구조를 구현할 수 있는 기반을 마련하고자 합니다.
 
-## 2. 레파지토리 구성
-- 레파지토리 내에 README.md 파일 생성하고 아래의 가이드라인과 작성팁을 참고하여 README.md 파일을 작성하세요. (이 레파지토리의 SAMPLE_README.md 참조)
-- 레파지토리 내에 docs 디렉토리를 생성하고 docs 디렉토리 내에는 과제 수행 하면서 작성한 각종 보고서, 발표자료를 올려둡니다. (이 레파지토리의 docs 디렉토리 참조)
-- 그 밖에 레파지토리의 폴더 구성은 과제 결과물에 따라 자유롭게 구성하되 가급적 코드의 목적이나 기능에 따라 디렉토리를 나누어 구성하세요.
+### 2.2. 기존 서비스 대비 차별성
+기존의 단일 프로토콜 기반 연구와 달리, 이 프로젝트는 CAN-FD와 Ethernet 경로를 병렬로 구현하여 두 통신 환경을 동시에 시뮬레이션하고 검증할 수 있습니다. 또한, 단순한 시뮬레이션에 그치지 않고, MATLAB App Designer로 UI를 설계하여 보안 검증 결과를 직관적으로 시각화하고, 사용자가 직접 공격 시나리오를 제어할 수 있는 실험적 환경을 제공합니다.
 
----
+### 2.3. 사회적 가치 도입 계획
+이 프로젝트는 자동차 네트워크 보안의 취약점을 해결함으로써 운전자와 승객의 안전을 보장하는 데 기여합니다. 또한, 자율주행 및 커넥티드카 기술의 신뢰성을 높여 관련 산업의 지속 가능한 성장을 위한 기반을 마련합니다.
 
-## 3. 레파지토리 제출 
+## 3. 시스템 설계
+### 3.1. 시스템 구성도
+이 시스템은 크게 송신부(TX)와 수신부(RX)로 구성되어 있습니다.
 
-- **`[주의]` 레파지토리 제출**은 해당 레파지토리의 ownership을 **학과 계정**으로 넘기는 것이므로 되돌릴 수 없습니다.
-- **레파지토리 제출** 전, 더 이상 수정 사항이 없는지 다시 한번 확인하세요.
-- github 레파지토리에서 Settings > General > Danger zone > Transfer 클릭
-  <img src="https://github.com/user-attachments/assets/cb2361d4-e07e-4b5d-9116-aa80dddd8a8b" alt="소유주 변경 경로" width="500" />
-  
-- [ Specify an organization or username ]에 'PNUCSE'를 입력하고 확인 메세지를 입력하세요.
-  <img src="https://github.com/user-attachments/assets/7c63955d-dcfe-4ac3-bdb6-7d2620575f3a" alt="소유주 변경" width="400" />
+- 송신부 (TX): BrakeSensorECU 역할을 모사하며, 센서 데이터를 생성하고, HMAC-SHA256 기반 MAC과 Freshness Counter를 추가하여 CAN-FD 및 Ethernet(UDP) 프레임으로 구성해 전송합니다.
 
----
+- 수신부 (RX): ABSECU 역할을 수행하며, 수신된 프레임에서 데이터를 분리한 후 MAC과 Freshness를 검증합니다. 검증에 성공한 데이터만 ECU 로직으로 전달하는 Fail-Safe 구조를 구현합니다.
 
-## 4. README.md 가이드 라인
-- README 파일 작성시에 아래의 5가지 항목의 내용은 필수적으로 포함해야 합니다.
-- 아래의 항목이외에 프로젝트의 이해를 돕기 위한 내용을 추가해도 됩니다.
-- SAMPLE_README.md 이 단순한 형태의 예제이니 참고하세요.
+### 3.2. 사용 기술
+3.2.1 개발 환경
 
-```markdown
-### 1. 프로젝트 배경
-#### 1.1. 국내외 시장 현황 및 문제점
-> 시장 조사 및 기존 문제점 서술
+(1) MATLAB/Simulink
 
-#### 1.2. 필요성과 기대효과
-> 왜 이 프로젝트가 필요한지, 기대되는 효과 등
+- 자동차 전장부품(Brake ECU, Dashboard ECU 등) 모델링
 
-### 2. 개발 목표
-#### 2.1. 목표 및 세부 내용
-> 전체적인 개발 목표, 주요 기능 및 기획 내용
+- CAN-FD 및 Ethernet 통신 시뮬레이션
 
-#### 2.2. 기존 서비스 대비 차별성 
-> 유사 서비스 비교 및 차별점 부각
+- Vehicle Network Toolbox 활용: CAN-FD Pack/Unpack, UDP/TCP 전송 모델링
 
-#### 2.3. 사회적 가치 도입 계획 
-> 프로젝트의 공공성, 지속 가능성, 환경 보호 등
-### 3. 시스템 설계
-#### 3.1. 시스템 구성도
-> 이미지 혹은 텍스트로 시스템 아키텍쳐 작성
->
-#### 3.2. 사용 기술
-> 프론트엔드, 백엔드, API 등 구체 기술 스택
+- 보안 알고리즘(HMAC-SHA256, Freshness Counter) 삽입 및 검증 환경 구축
 
-### 4. 개발 결과
-#### 4.1. 전체 시스템 흐름도
-> 기능 흐름 설명 및 도식화 가능
->
-#### 4.2. 기능 설명 및 주요 기능 명세서
-> 주요 기능에 대한 상세 설명, 각 기능의 입력/출력 및 설명
->
-#### 4.3. 디렉토리 구조
->
-#### 4.4. 산업체 멘토링 의견 및 반영 사항
-> 멘토 피드백과 적용한 사례 정리
+(2) VS Code
 
-### 5. 설치 및 실행 방법
->
-#### 5.1. 설치절차 및 실행 방법
-> 설치 명령어 및 준비 사항, 실행 명령어, 포트 정보 등
-#### 5.2. 오류 발생 시 해결 방법
-> 선택 사항, 자주 발생하는 오류 및 해결책 등
+- MATLAB 스크립트와 일부 보안 알고리즘 테스트 코드 관리
 
-### 6. 소개 자료 및 시연 영상
-#### 6.1. 프로젝트 소개 자료
-> PPT 등
-#### 6.2. 시연 영상
-> 영상 링크 또는 주요 장면 설명
+(3) MATLAB App Designer
 
-### 7. 팀 구성
-#### 7.1. 팀원별 소개 및 역할 분담
->
-#### 7.2. 팀원 별 참여 후기
-> 개별적으로 느낀 점, 협업, 기술적 어려움 극복 사례 등
+- UI 설계(보안 알고리즘 선택, 시뮬레이션 결과 시각화)
 
-### 8. 참고 문헌 및 출처
+3.2.2 사용 언어
 
-```
+- MATLAB: Simulink 모델링, CAN-FD/Ethernet 통신, 보안 알고리즘 구현 및 결과 분석
 
-## 5. README.md 작성팁 
-* 마크다운 언어를 이용해 README.md 파일을 작성할 때 참고할 수 있는 마크다운 언어 문법을 공유합니다.  
-* 다양한 예제와 보다 자세한 문법은 [이 문서](https://www.markdownguide.org/basic-syntax/)를 참고하세요.
+- Python 3.10: 보조적 알고리즘 검증, 데이터 분석, 시각화
 
-### 5.1. 헤더 Header
-```
-# This is a Header 1
-## This is a Header 2
-### This is a Header 3
-#### This is a Header 4
-##### This is a Header 5
-###### This is a Header 6
-####### This is a Header 7 은 지원되지 않습니다.
-```
-<br />
+3.2.3 사용 기술
 
-### 5.2. 인용문 BlockQuote
-```
-> This is a first blockqute.
->	> This is a second blockqute.
->	>	> This is a third blockqute.
-```
-> This is a first blockqute.
->	> This is a second blockqute.
->	>	> This is a third blockqute.
-<br />
+(1) 통신 및 보안
 
-### 5.3. 목록 List
-* **Ordered List**
-```
-1. first
-2. second
-3. third  
-```
-1. first
-2. second
-3. third
-<br />
+- Vehicle Network Toolbox: CAN-FD 프레임 생성, ECU 간 통신 모델링
 
-* **Unordered List**
-```
-* 하나
-  * 둘
+- Instrument Control Toolbox: UDP/TCP 블록 활용 → Ethernet 통신 경로 구현
 
-+ 하나
-  + 둘
+- 보안 알고리즘: HMAC-SHA256 기반 무결성 검증, Freshness Counter 기반 리플레이 공격 방어
 
-- 하나
-  - 둘
-```
-* 하나
-  * 둘
+(2) UI 및 시각화
 
-+ 하나
-  + 둘
+- MATLAB App Designer: 알고리즘 선택, 시뮬레이션 결과(무결성, Freshness, 지연) 시각화
 
-- 하나
-  - 둘
-<br />
+- Scope/Display 블록: ECU 출력값과 보안 검증 결과 모니터링
 
-### 5.4. 코드 CodeBlock
-* 코드 블럭 이용 '``'
-```
-여러줄 주석 "```" 이용
-"```
-#include <stdio.h>
-int main(void){
-  printf("Hello world!");
-  return 0;
-}
-```"
+(3) 배포 및 환경 관리
 
-단어 주석 "`" 이용
-"`Hello world`"
+- Docker(선택적): MATLAB Runtime 기반 컨테이너 환경에서 Simulink 실행 가능성 검토
 
-* 큰 따움표(") 없이 사용하세요.
-``` 
-<br />
+- GitHub: Simulink 모델 및 코드 관리, 버전 관리
 
-### 5.5. 링크 Link
-```
-[Title](link)
-[부산대학교 정보컴퓨터공학부](https://cse.pusan.ac.kr/cse/index..do)
+## 4. 개발 결과
+### 4.1 전체 시스템 흐름도
 
-<link>
-<https://cse.pusan.ac.kr/cse/index..do>
-``` 
-[부산대학교 정보컴퓨터공학부](https://cse.pusan.ac.kr/cse/index..do)
+본 시스템은 차량 내 ECU 간의 보안 통신을 Simulink 환경에서 모델링하고, CAN-FD와 Ethernet 경로를 병렬로 구현하여 다양한 공격 시나리오에 대응할 수 있는 구조를 설계하였다. 전체적인 데이터 흐름과 처리 단계는 아래와 같다.
 
-<https://cse.pusan.ac.kr/cse/index..do>
-<br />
+1. **센서 데이터 생성**  
+   - 송신부(TX ECU)에서 브레이크 페달의 **원시 데이터(Raw)** 와 **눌림 여부(Pressed)** 신호를 생성한다.  
+   - 이 데이터는 이후 보안 모듈 입력으로 전달된다.
 
-### 5.6. 강조 Highlighting
-```
-*single asterisks*
-_single underscores_
-**double asterisks**
-__double underscores__
-~~cancelline~~
-```
-*single asterisks* <br />
-_single underscores_ <br />
-**double asterisks** <br />
-__double underscores__ <br />
-~~cancelline~~  <br />
-<br />
+2. **보안 데이터 생성**  
+   - Raw 데이터와 Pressed 데이터에 **Freshness Counter** 값을 결합한다.  
+   - 해당 값을 입력으로 하여 **HMAC-SHA256 기반 MAC(Message Authentication Code)** 을 생성한다.  
+   - 이 과정을 통해 무결성과 신선도를 동시에 확보한다.
 
-### 5.7. 이미지 Image
-```
-<img src="image URL" width="600px" title="Title" alt="Alt text"></img>
-![Alt text](image URL "Optional title")
-```
-- 웹에서 작성한다면 README.md 내용 안으로 이미지를 드래그 앤 드롭하면 이미지가 생성됩니다.
-- 웹이 아닌 로컬에서 작성한다면, github issue에 이미지를 드래그 앤 드롭하여 image url 을 얻을 수 있습니다. (URL만 복사하고 issue는 제출 안 함.)
-  <img src="https://github.com/user-attachments/assets/0fe3bff1-7a2b-4df3-b230-cac4ef5f6d0b" alt="이슈에 image 올림" width="600" />
-  <img src="https://github.com/user-attachments/assets/251c6d42-b36b-4ad4-9cfa-fa2cc67a9a50" alt="image url 복사" width="600" />
+3. **데이터 전송**  
+   - 생성된 데이터(AppData, Pressed, Freshness, MAC)를  
+     - **CAN-FD 프레임(최대 64 Byte)**  
+     - **Ethernet(UDP 기반 PDU)**  
+     두 개의 경로에 병렬로 담아 전송한다.  
+   - CAN-FD는 실시간성과 호환성을, Ethernet은 고속·대용량 전송을 담당한다.
+
+4. **데이터 수신**  
+   - 수신부(RX ECU)는 두 개의 경로(CAN-FD / UDP)를 통해 데이터를 수신한다.  
+   - Vehicle Network Toolbox(CAN Unpack) 및 Instrument Control Toolbox(UDP Receive)를 통해 패킷을 해석한다.
+
+5. **보안 검증**  
+   - 수신 ECU는 동일한 **HMAC-SHA256 연산**을 수행하여 송신부에서 생성된 MAC과 비교한다.  
+   - 동시에 Freshness Counter 값의 증가 여부를 확인하여 **리플레이 공격 여부**를 판단한다.
+
+6. **Fail-Safe 처리**  
+   - 검증에 **성공한 데이터만** ECU 로직으로 전달된다.  
+   - 검증에 실패한 데이터(위·변조, 재전송 등)는 즉시 차단하여 시스템에 반영되지 않도록 한다.
+
+7. **결과 시각화**  
+   - **Lamp**: 데이터 검증 성공/실패를 색상으로 표시 (예: Green=정상, Red=실패).  
+   - **Gauge**: Brake Force 값을 실시간으로 시각화하여 운전자의 제동 상태를 확인할 수 있다.  
+   - **UI(App Designer 연동)**: 시뮬레이션 결과를 직관적으로 표시하고, 알고리즘별 성능 비교가 가능하다.
+
+이와 같은 흐름도를 통해 CAN-FD와 Ethernet 병렬 경로 환경에서의 보안 통신을 실험적으로 검증하였으며, 리플레이 공격·위변조·DoS 공격 상황에 대한 ECU 반응을 시뮬레이션하였다.
+
+### 4.2. 기능 설명 및 주요 기능 명세서
+|기능|입력|출력|설명|
+|-----|---|---|---|
+|MAC 생성|appdata(3B), freshness(4B)|mac8(8B)|HMAC-SHA256을 계산하고 상위 8바이트를 추출해 MAC을 생성합니다.|
+|Freshness 검증|currFV(현재 값), lastFV(이전 값)|ok(Boolean)|currFV가 lastFV보다 크고, 증가 폭이 허용 윈도우(W=1024) 내에 있는지 확인합니다.|
+데이터 게이팅|valid(Boolean), data(Raw, Pressed)|data or default	|valid 값이 true일 때만 데이터를 통과시키고, false일 경우 기본값(0)을 출력합니다.|
+
+### 4.3. 산업체 멘토링 의견 및 반영 사항
+
+- 과제 목표 명확화: 피드백에 따라 연구 범위를 Simulink 기반 보안 통신 환경 구축, CAN/Ethernet 시뮬레이션, CAN 프로토콜 보안 강화의 3가지 핵심 목표로 재정립했습니다.
+
+- 알고리즘 합리화: 국제 표준 문제로 채택이 어려운 SPECK 대신, 국내 개발 경량 블록암호인 CHAM 알고리즘을 향후 검토 대상으로 반영하여 실용성을 높였습니다.
+
+- 역할 분담 구체화: 멘토링에서 긍정적으로 평가받은 역할 분담 체계를 유지하면서 **Ethernet 및 TLS 관련 보안 기능(홍재왕), CAN-FD 기반 통신 및 Freshness 검증(석재영), UI 개발 및 워크플로우 설계(레퐁푸)**로 세부 작업을 명확히 구분했습니다.
+
+## 5. 설치 및 실행 방법
+### 5.1. 설치절차 및 실행 방법
+(1) 사전 준비
+
+- MATLAB R2023b 이상, Simulink 설치 필요
+
+- Vehicle Network Toolbox, Instrument Control Toolbox 설치 필요
+
+- (선택) Docker Desktop 설치 후 MATLAB Runtime 환경 구성 가능
+
+(2) 프로젝트 다운로드
+
+git clone https://github.com/사용자이름/저장소이름.git
+cd 저장소이름
 
 
-### 5.8. 유튜브 영상 추가
-```markdown
-[![영상 이름](유튜브 영상 썸네일 URL)](유튜브 영상 URL)
-[![부산대학교 정보컴퓨터공학부 소개](http://img.youtube.com/vi/zh_gQ_lmLqE/0.jpg)](https://www.youtube.com/watch?v=zh_gQ_lmLqE)    
-```
-[![부산대학교 정보컴퓨터공학부 소개](http://img.youtube.com/vi/zh_gQ_lmLqE/0.jpg)](https://www.youtube.com/watch?v=zh_gQ_lmLqE)    
+(3) Simulink 모델 실행
 
-- 이때 유튜브 영상 썸네일 URL은 유투브 영상 URL로부터 다음과 같이 얻을 수 있습니다.
+- MATLAB 실행 → project.slx (예: CAN_FD_Security.slx) 열기
 
-- `Youtube URL`: https://www.youtube.com/watch?v={동영상 ID}
-- `Youtube Thumbnail URL`: http://img.youtube.com/vi/{동영상 ID}/0.jpg 
-- 예를 들어, https://www.youtube.com/watch?v=zh_gQ_lmLqE 라고 하면 썸네일의 주소는 http://img.youtube.com/vi/zh_gQ_lmLqE/0.jpg 이다.
+- 상단 툴바에서 Run 버튼 클릭
+
+- App Designer UI(security_UI.mlapp) 실행 시 알고리즘 선택 및 결과 시각화 가능
+
+(4) 포트 정보
+
+- CAN-FD: Simulink 내부 가상 네트워크 환경 기반
+
+- Ethernet(UDP): 기본 포트 5000 사용 (필요 시 UDP Send / UDP Receive 블록 속성에서 수정 가능)
+
+
+### 5.2. 오류 발생 시 해결 방법
+
+(1) Toolbox 누락 오류
+
+- 오류 메시지에 Unrecognized block 발생 시 → Add-On Explorer에서 해당 Toolbox 설치
+
+- 예: Vehicle Network Toolbox, Instrument Control Toolbox
+
+(2) 포트 충돌 오류 (UDP)
+
+- Port already in use 오류 발생 시 → 다른 포트(예: 6000)로 변경 후 재실행
+
+(3) 보안 알고리즘 오류
+
+- HMAC-SHA256 연산 불일치 발생 시 → 송신부/수신부의 Key 및 Freshness Counter 초기값이 동일한지 확인
+
+(4) Docker 실행 오류 (선택적 환경)
+
+- MATLAB Runtime 이미지 버전 불일치 시 → docker pull mathworks/matlab-runtime:r2023b 명령어로 최신 이미지 다운로드
+
+
+## 6. 소개 자료 및 시연 영상
+### 6.1. 프로젝트 소개 자료
+https://github.com/pnucse-capstone2025/Capstone-2025-team-39/blob/main/docs/03.%EB%B0%9C%ED%91%9C%EC%9E%90%EB%A3%8C/autoshield_presentation.pdf
+### 6.2. 시연 영상
+https://youtu.be/P9r13Io3QSs?si=FCTwgvSGJHzuFtQ8
+
+## 7. 팀 구성
+### 7.1. 팀원별 소개 및 역할 분담
+
+(1) 홍재왕 (CAN 프로토콜 담당)
+
+- CAN 프로토콜 메시지 구조와 취약점(스푸핑, 리플레이) 분석
+
+- Simulink 기반 CAN 통신 시뮬레이션 구현
+
+- MAC, XOR, SHA-256 적용을 통한 유효 메시지 전송 보장 및 초기 구현 완료
+
+- 보안 알고리즘 성능 비교(지연 시간, 메모리 사용) 참여
+
+(2) 석재영 (TCP/IP, Ethernet 담당)
+
+- Automotive Ethernet 및 TCP/IP 특성과 V2X 보안 요구사항 분석
+
+- Simulink 기반 Ethernet 통신 시뮬레이션 구현
+
+- TLS 간소화 버전 적용 테스트 및 데이터 흐름 분석
+
+- 알고리즘 성능 비교 지원
+
+(3) 레퐁푸 (Simulink/시각화 담당)
+
+- Simulink 환경 구축 및 ECU, 센서, 계기판 메시지 흐름 모델링
+
+- 보안 알고리즘 통합 워크플로우 설계
+
+- MATLAB App Designer 기반 UI 개발(알고리즘 선택, 성능 시각화)
+
+- 보고서 작성 및 문서화 주도
+
+※ 기존 역할에서 SHA-256, Gauge/Slider를 활용한 통신 흐름, 초기 CAN 보안 구현을 반영하였으며, 국가보안기술연구소 피드백에 따라 LLM 적용은 제외하였습니다. 역할은 프로젝트 일정에 따라 유연하게 조정하였습니다.
+
+### 7.2. 팀원 별 참여 후기
+
+- 홍재왕:
+CAN 프로토콜의 취약점을 직접 구현·검증하며, 단순한 이론 검토가 아니라 실제 보안 메커니즘이 어떻게 적용되는지 체감할 수 있었습니다. 특히 HMAC-SHA256과 Freshness Counter의 성능 차이를 비교하면서, 차량 통신 보안에서 “성능과 안전성 간의 균형”이 핵심임을 배웠습니다.
+
+- 석재영:
+Ethernet 경로와 TLS 적용 가능성을 실험하며, 차량 네트워크가 단일 프로토콜을 넘어 다중 프로토콜 환경으로 확장된다는 점을 확인할 수 있었습니다. TCP/IP 기반 시뮬레이션에서 발생한 지연 문제를 최적화하는 과정은 어려웠지만, 협업을 통해 해결하며 실무적인 통찰을 얻을 수 있었습니다.
+
+- 레퐁푸:
+Simulink와 App Designer를 활용하여 UI 및 시각화를 구현하면서, 보안 검증 결과를 직관적으로 표현하는 것이 얼마나 중요한지 알게 되었습니다. Lamp, Indicator, Gauge를 통해 Fail-Safe 동작을 확인했을 때 보람을 크게 느꼈습니다. 또한 문서화를 주도하며 팀의 결과물을 체계적으로 정리하는 경험을 쌓았습니다.
+
+## 8. 참고 문헌 및 출처
+[1] R. Bosch GmbH, CAN Specification Version 2.0, Stuttgart, Germany, 1991.
+[2] ISO 11898-1, Road vehicles — Controller area network (CAN) — Part 1: Data link layer and physical signalling, International Organization for Standardization, Geneva, Switzerland, 2015.
+[3] ISO 11898-7, Road vehicles — Controller area network (CAN) — Part 7: CAN FD data link layer specification, International Organization for Standardization, Geneva, Switzerland, 2015.
+[4] MathWorks, Vehicle Network Toolbox Documentation: Simulink Support for CAN FD and Ethernet, MathWorks Inc., Natick, MA, USA, 2023. [Online]. Available: https://www.mathworks.com/help/vnt/
+[5] M. Wolf, A. Weimerskirch, and C. Paar, "Security in Automotive Bus Systems," Proceedings of the Workshop on Embedded Security in Cars (ESCAR), pp. 1-12, 2004.
+[6] C. Miller and C. Valasek, "Remote Exploitation of an Unaltered Passenger Vehicle," Black Hat USA, pp. 1-91, Aug. 2015.
+[7] FIPS PUB 180-4, Secure Hash Standard (SHS), Federal Information Processing Standards Publication, National Institute of Standards and Technology (NIST), Gaithersburg, MD, 2015.
+[8] H. Krawczyk, M. Bellare, and R. Canetti, "HMAC: Keyed-Hashing for Message Authentication," RFC 2104, Internet Engineering Task Force (IETF), Feb. 1997.
+[9] H. Kopetz, Real-Time Systems: Design Principles for Distributed Embedded Applications, Springer, 2011.
+[10] MathWorks, MATLAB Function Blocks and Code Generation for Embedded Systems, MathWorks Inc., Natick, MA, USA, 2023. [Online]. Available: https://www.mathworks.com/help/simulink/ug/matlab-function-block.html
+
+
 
